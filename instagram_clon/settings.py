@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # local app
     'users',
     'shared',
+    'post',
 ]
 
 MIDDLEWARE = [
