@@ -5,9 +5,10 @@ from django.db.models import UniqueConstraint
 from users.models import User
 from shared.models import BaseModel
 
+
 class Post(BaseModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
-    image = models.ImageField(upload_to='posts_images', validators=[FileExtensionValidator(allowed_extensions=['jpeg', 'png', 'jpg'])])
+    image = models.ImageField(upload_to='posts_images', validators=[FileExtensionValidator(allowed_extensions=['jpeg','png','jpg'])])
     caption = models.TextField(validators=[MaxLengthValidator(2000)])
 
     class Meta:
@@ -17,6 +18,8 @@ class Post(BaseModel):
 
     def __str__(self):
         return f"{self.author} post about {self.caption}"
+
+
 class PostComment(BaseModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
@@ -26,6 +29,7 @@ class PostComment(BaseModel):
     def __str__(self):
         return f"comment by {self.author}"
 
+
 class PostLike(BaseModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")
@@ -33,7 +37,7 @@ class PostLike(BaseModel):
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields =['author', 'post'],
+                fields=['author', 'post'],
                 name='PostLikeUnique'
             )
         ]
@@ -41,7 +45,7 @@ class PostLike(BaseModel):
 
 class CommentLike(BaseModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.ForeignKey(PostComment, on_delete=models.CASCADE, related_name ='likes')
+    comment = models.ForeignKey(PostComment, on_delete=models.CASCADE, related_name='likes')
 
     class Meta:
         constraints = [
